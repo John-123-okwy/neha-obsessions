@@ -1,0 +1,175 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--color-text-900);
+  margin: 0;
+}
+
+.addBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: var(--color-magenta-500);
+  color: var(--color-white);
+  border: none;
+  padding: 12px 22px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+}
+
+.imageWrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.unavailableBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(30, 11, 54, 0.75);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+
+.featuredBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--color-magenta-500);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.cardBody {
+  padding: var(--space-md);
+  flex: 1;
+}
+
+.category {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-magenta-500);
+  margin: 0 0 4px;
+}
+
+.name {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-text-900);
+  margin: 0 0 4px;
+}
+
+.price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-purple-700);
+  margin: 0;
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border-top: 1px solid var(--color-lavender-100);
+}
+
+.editBtn,
+.deleteBtn {
+  flex: 1;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  border: none;
+  padding: 8px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.editBtn {
+  background: var(--color-lavender-100);
+  color: var(--color-purple-700);
+}
+
+.deleteBtn {
+  background: transparent;
+  color: #DC2626;
+  border: 1px solid #FEE2E2;
+}
+
+.confirmRow {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.confirmYes,
+.confirmNo {
+  flex: 1;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  border: none;
+  padding: 8px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.confirmYes {
+  background: #DC2626;
+  color: var(--color-white);
+}
+
+.confirmNo {
+  background: var(--color-lavender-100);
+  color: var(--color-text-900);
+}
+
+.empty {
+  font-family: var(--font-body);
+  color: var(--color-text-600);
+  text-align: center;
+  padding: var(--space-2xl);
+}

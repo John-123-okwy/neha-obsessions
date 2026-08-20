@@ -1,0 +1,52 @@
+:root {
+  /* Brand core */
+  --color-plum-950: #1E0B36;
+  --color-purple-700: #6B21A8;
+  --color-purple-800: #4C1D75;
+  --color-magenta-500: #C026D3;
+  --color-magenta-400: #E879F9;
+  --color-lavender-100: #F3E8FF;
+  --color-cream-50: #FFF9F2;
+
+  --color-text-900: #2E1065;
+  --color-text-600: #6B7280;
+  --color-white: #FFFFFF;
+
+  --gradient-hero: linear-gradient(135deg, var(--color-purple-700) 0%, var(--color-magenta-500) 100%);
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-pill: 999px;
+
+  /* Type */
+  --font-display: 'Baloo 2', sans-serif;
+  --font-body: 'Work Sans', sans-serif;
+
+  /* Shadow */
+  --shadow-card: 0 8px 24px rgba(46, 16, 101, 0.15);
+  --shadow-card-hover: 0 14px 32px rgba(46, 16, 101, 0.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text-900);
+  background: var(--color-lavender-100);
+}
+
+a {
+  color: inherit;
+}

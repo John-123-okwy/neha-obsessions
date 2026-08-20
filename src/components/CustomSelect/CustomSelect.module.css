@@ -1,0 +1,85 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.trigger {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-lavender-100);
+  background: var(--color-white);
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.trigger:hover {
+  border-color: var(--color-purple-700);
+}
+
+.valueText {
+  color: var(--color-text-900);
+}
+
+.placeholderText {
+  color: var(--color-text-600);
+}
+
+.arrow {
+  color: var(--color-text-600);
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: var(--space-sm);
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card-hover);
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 30;
+  padding: 6px;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-900);
+  background: none;
+  border: none;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--color-lavender-100);
+}
+
+.optionSelected {
+  background: var(--color-purple-700);
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+.optionSelected:hover {
+  background: var(--color-purple-800);
+}

@@ -1,0 +1,165 @@
+.receipt {
+  background: var(--color-white);
+  max-width: 380px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card-hover);
+  position: relative;
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: center;
+  margin-bottom: var(--space-md);
+}
+
+.logoBadge {
+  background: var(--color-purple-700);
+  color: var(--color-white);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brandName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-text-900);
+}
+
+.receiptLabel {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-600);
+  margin: 0 0 8px;
+}
+
+.statusPill {
+  display: block;
+  width: fit-content;
+  margin: 0 auto var(--space-lg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 4px 14px;
+  border-radius: var(--radius-pill);
+}
+
+.metaGrid {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.metaLabel {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  color: var(--color-text-600);
+  margin: 0 0 2px;
+}
+
+.metaValue {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--color-text-900);
+  word-break: break-all;
+}
+
+.divider {
+  border-top: 1px dashed var(--color-lavender-100);
+  margin: var(--space-md) 0;
+}
+
+.sectionTitle {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-purple-700);
+  margin: 0 0 6px;
+}
+
+.line {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-900);
+  margin: 0 0 2px;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-900);
+  padding: 3px 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-purple-700);
+  padding-top: var(--space-sm);
+  margin-top: 4px;
+  border-top: 1.5px solid var(--color-lavender-100);
+}
+
+.refLine {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--color-text-600);
+  text-align: center;
+  margin: var(--space-md) 0 0;
+}
+
+.thanksBox {
+  background: var(--color-lavender-100);
+  color: var(--color-text-900);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  text-align: center;
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+  margin: var(--space-lg) 0 var(--space-md);
+}
+
+.zigzagTop {
+  height: 10px;
+  background:
+    linear-gradient(135deg, var(--color-lavender-100) 25%, transparent 25%) 0 0,
+    linear-gradient(225deg, var(--color-lavender-100) 25%, transparent 25%) 0 0;
+  background-size: 10px 10px;
+  background-repeat: repeat-x;
+  margin: 0 calc(-1 * var(--space-lg));
+}
+
+.footer {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--color-text-600);
+  margin: var(--space-sm) 0 0;
+}
+
+@media (max-width: 420px) {
+  .receipt {
+    max-width: 100%;
+  }
+}

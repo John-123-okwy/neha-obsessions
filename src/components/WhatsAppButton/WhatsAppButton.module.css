@@ -1,0 +1,20 @@
+.button {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  background: #25D366;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 14px 20px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  box-shadow: var(--shadow-card);
+  z-index: 50;
+  transition: transform 0.2s ease;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}

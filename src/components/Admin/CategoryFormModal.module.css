@@ -1,0 +1,133 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 11, 54, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--space-lg);
+}
+
+.sheet {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-card-hover);
+}
+
+.handle {
+  display: none;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-text-900);
+  margin: 0 0 var(--space-lg);
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-900);
+  margin-bottom: var(--space-sm);
+}
+
+.input {
+  font-family: var(--font-body);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-lavender-100);
+  font-size: 0.95rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-purple-700);
+}
+
+.hint {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-600);
+  margin: 0 0 var(--space-md);
+}
+
+.error {
+  color: #DC2626;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  margin-bottom: var(--space-md);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.cancelBtn {
+  flex: 1;
+  font-family: var(--font-body);
+  font-weight: 600;
+  background: var(--color-lavender-100);
+  color: var(--color-text-900);
+  border: none;
+  padding: 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.saveBtn {
+  flex: 1;
+  font-family: var(--font-body);
+  font-weight: 600;
+  background: var(--color-magenta-500);
+  color: var(--color-white);
+  border: none;
+  padding: 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mobile: bottom sheet instead of centered card */
+@media (max-width: 640px) {
+  .overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .sheet {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    animation: slideUp 0.3s ease;
+  }
+
+  .handle {
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: var(--color-lavender-100);
+    border-radius: 999px;
+    margin: 0 auto var(--space-lg);
+  }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

@@ -1,0 +1,118 @@
+
+
+
+.hero {
+  position: relative;
+  background: var(--gradient-hero);
+  color: var(--color-white);
+  padding: var(--space-2xl) var(--space-lg) 0;
+  overflow: hidden;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: var(--space-2xl);
+}
+
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.15);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-lg);
+}
+
+.headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.15;
+  margin: 0 0 var(--space-md);
+}
+
+.subtext {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  opacity: 0.9;
+  margin: 0 0 var(--space-xl);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primaryBtn {
+  background: var(--color-white);
+  color: var(--color-purple-700);
+}
+
+.secondaryBtn {
+  background: transparent;
+  color: var(--color-white);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+}
+
+.primaryBtn:hover,
+.secondaryBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* Marquee strip */
+.marquee {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  padding: var(--space-md) 0;
+}
+
+.marqueeTrack {
+  display: flex;
+  gap: var(--space-xl);
+  width: max-content;
+  animation: scroll 28s linear infinite;
+}
+
+.marqueeItem {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none;
+  }
+}

@@ -1,0 +1,159 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--color-text-900);
+  margin: 0;
+}
+
+.addBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: var(--color-magenta-500);
+  color: var(--color-white);
+  border: none;
+  padding: 12px 22px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-md);
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.orderControls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.orderControls button {
+  width: 24px;
+  height: 20px;
+  border: none;
+  background: var(--color-lavender-100);
+  color: var(--color-purple-700);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.65rem;
+}
+
+.orderControls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cardBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-text-900);
+  margin: 0;
+}
+
+.slug {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-text-600);
+  margin: 2px 0 0;
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.editBtn,
+.deleteBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.editBtn {
+  background: var(--color-lavender-100);
+  color: var(--color-purple-700);
+}
+
+.deleteBtn {
+  background: transparent;
+  color: #DC2626;
+}
+
+.confirmRow {
+  display: flex;
+  gap: 6px;
+}
+
+.confirmYes {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  background: #DC2626;
+  color: var(--color-white);
+  border: none;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.confirmNo {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  background: var(--color-lavender-100);
+  color: var(--color-text-900);
+  border: none;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.empty {
+  font-family: var(--font-body);
+  color: var(--color-text-600);
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex-wrap: wrap;
+  }
+
+  .cardActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

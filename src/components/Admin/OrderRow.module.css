@@ -1,0 +1,141 @@
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  margin-bottom: var(--space-md);
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  flex-wrap: wrap;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.orderId {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-text-900);
+}
+
+.customerName {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-text-600);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.date {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-600);
+}
+
+.total {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-purple-700);
+}
+
+.badge {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.7rem;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.chevron {
+  font-size: 0.9rem;
+  color: var(--color-text-600);
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.body {
+  padding: 0 var(--space-md) var(--space-md);
+  border-top: 1px solid var(--color-lavender-100);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.section {
+  padding-top: var(--space-md);
+}
+
+.sectionTitle {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-600);
+  margin: 0 0 8px;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-900);
+  padding: 4px 0;
+}
+
+.detailLine {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-900);
+  margin: 0 0 2px;
+}
+
+.statusSelect {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-lavender-100);
+  background: var(--color-white);
+  width: 100%;
+  max-width: 240px;
+}
+
+.statusSelect:focus {
+  outline: none;
+  border-color: var(--color-purple-700);
+}
+
+@media (max-width: 480px) {
+  .headerRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

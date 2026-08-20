@@ -1,0 +1,144 @@
+.title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--color-text-900);
+  margin: 0 0 8px;
+}
+
+.subtext {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-600);
+  margin: 0 0 var(--space-lg);
+  max-width: 480px;
+}
+
+.addForm {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.input {
+  flex: 1;
+  min-width: 200px;
+  font-family: var(--font-body);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-lavender-100);
+  font-size: 0.9rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-purple-700);
+}
+
+.addBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  background: var(--color-purple-700);
+  color: var(--color-white);
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.addBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #DC2626;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  margin-bottom: var(--space-md);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-white);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.email {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-text-900);
+  margin: 0;
+}
+
+.youBadge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--color-lavender-100);
+  color: var(--color-purple-700);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  margin-top: 4px;
+}
+
+.protectedText {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-600);
+  font-style: italic;
+}
+
+.removeBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  background: transparent;
+  color: #DC2626;
+  border: 1px solid #FEE2E2;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.confirmRow {
+  display: flex;
+  gap: 6px;
+}
+
+.confirmYes,
+.confirmNo {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  border: none;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.confirmYes {
+  background: #DC2626;
+  color: var(--color-white);
+}
+
+.confirmNo {
+  background: var(--color-lavender-100);
+  color: var(--color-text-900);
+}
