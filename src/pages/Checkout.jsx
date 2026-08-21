@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { createOrder, getOrderByReference } from "../services/orders";
 import { getAllDeliveryZones } from "../services/deliveryZones";
 import { retryAsync } from "../utils/retry";
+import { generatePaymentReference } from "../utils/paymentReference";
 import CustomSelect from "../components/CustomSelect/CustomSelect";
 import LoadingOverlay from "../components/LoadingOverlay/LoadingOverlay";
 import styles from "./Checkout.module.css";
@@ -41,46 +42,23 @@ export default function Checkout() {
     loadZones();
   }, []);
 
-  useEffect(() => {
-    const saved = localStorage.getItem(PENDING_KEY);
-    if (saved) {
-      const snapshot = JSON.parse(saved);
-      setProcessing(true);
-      setStatusMessage("Finishing your last payment…");
-      attemptCompleteOrder(snapshot.reference, snapshot);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
-  const selectedZone = zones.find((z) => z.id === form.zoneId);
-  const deliveryFee = form.deliveryMethod === "delivery" ? (selectedZone?.fee || 0) : 0;
-  const grandTotal = subtotal + deliveryFee;
-
-  function isFormValid() {
-    if (!form.name || !form.email || !form.phone) return false;
-    if (form.deliveryMethod === "delivery") {
-      return Boolean(form.address && form.zoneId);
-    }
-    return true;
-  }
-
   async function verifyReference(reference) {
     const res = await fetch("/api/verify-payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ reference }),
     });
-    if (!res.ok) throw new Error("Verification request failed");
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`Verification request failed: ${res.status} ${body}`);
+    }
     return res.json();
   }
 
   const attemptCompleteOrder = useCallback(async (reference, snapshot) => {
     setError("");
     setUnresolved(null);
+    setProcessing(true);
 
     try {
       const result = await retryAsync(() => verifyReference(reference), {
@@ -127,42 +105,93 @@ export default function Checkout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearCart, navigate]);
 
+  // Resume flow: handles BOTH the normal iframe callback AND the case where
+  // Paystack did a full-page redirect back to us (common on some mobile browsers).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlReference = params.get("reference") || params.get("trxref");
+    const saved = localStorage.getItem(PENDING_KEY);
+
+    if (urlReference && saved) {
+      const snapshot = JSON.parse(saved);
+      if (snapshot.reference === urlReference) {
+        window.history.replaceState({}, "", "/checkout");
+        setStatusMessage("Confirming your payment…");
+        attemptCompleteOrder(urlReference, snapshot);
+        return;
+      }
+    }
+
+    // No URL reference, but a pending payment exists from an earlier session
+    if (saved && !urlReference) {
+      const snapshot = JSON.parse(saved);
+      setStatusMessage("Finishing your last payment…");
+      attemptCompleteOrder(snapshot.reference, snapshot);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleChange(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  const selectedZone = zones.find((z) => z.id === form.zoneId);
+  const deliveryFee = form.deliveryMethod === "delivery" ? (selectedZone?.fee || 0) : 0;
+  const grandTotal = subtotal + deliveryFee;
+
+  function isFormValid() {
+    if (!form.name || !form.email || !form.phone) return false;
+    if (form.deliveryMethod === "delivery") {
+      return Boolean(form.address && form.zoneId);
+    }
+    return true;
+  }
+
   function handlePayment() {
     if (!isFormValid()) {
       setError("Please fill in all required fields.");
       return;
     }
+    if (!window.PaystackPop) {
+      setError("Payment system did not load. Please refresh the page and try again.");
+      return;
+    }
+
     setError("");
     setProcessing(true);
     setStatusMessage("Waiting for payment…");
     setShowRedirectOverlay(true);
 
-    // Simple, reliable safety timer — hides the bridge overlay shortly
-    // after Paystack's own popup has had time to take over the screen.
+    const reference = generatePaymentReference();
+    const snapshot = {
+      reference,
+      customer: { name: form.name, email: form.email, phone: form.phone },
+      deliveryMethod: form.deliveryMethod,
+      address: form.deliveryMethod === "delivery" ? form.address : null,
+      deliveryZone: selectedZone ? { name: selectedZone.name, fee: selectedZone.fee } : null,
+      items,
+      subtotal,
+      deliveryFee,
+      totalPrice: grandTotal,
+    };
+
+    // Saved BEFORE Paystack ever opens — this is what makes recovery possible
+    // even if the browser fully navigates away and JS state is lost.
+    localStorage.setItem(PENDING_KEY, JSON.stringify(snapshot));
+
     const overlayTimer = setTimeout(() => setShowRedirectOverlay(false), 1200);
 
-    let handler;
     try {
-      handler = window.PaystackPop.setup({
+      const handler = window.PaystackPop.setup({
         key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
         email: form.email,
         amount: Math.round(grandTotal * 100),
         currency: "NGN",
+        ref: reference,
+        callback_url: `${window.location.origin}/checkout`,
         callback: (response) => {
           clearTimeout(overlayTimer);
           setShowRedirectOverlay(false);
-          const snapshot = {
-            reference: response.reference,
-            customer: { name: form.name, email: form.email, phone: form.phone },
-            deliveryMethod: form.deliveryMethod,
-            address: form.deliveryMethod === "delivery" ? form.address : null,
-            deliveryZone: selectedZone ? { name: selectedZone.name, fee: selectedZone.fee } : null,
-            items,
-            subtotal,
-            deliveryFee,
-            totalPrice: grandTotal,
-          };
-          localStorage.setItem(PENDING_KEY, JSON.stringify(snapshot));
           setStatusMessage("Payment received — confirming…");
           attemptCompleteOrder(response.reference, snapshot);
         },
@@ -202,10 +231,7 @@ export default function Checkout() {
           <p className={styles.refCode}>Ref: {unresolved.reference}</p>
           <button
             className={styles.retryBtn}
-            onClick={() => {
-              setProcessing(true);
-              attemptCompleteOrder(unresolved.reference, unresolved);
-            }}
+            onClick={() => attemptCompleteOrder(unresolved.reference, unresolved)}
           >
             Retry Confirmation
           </button>
