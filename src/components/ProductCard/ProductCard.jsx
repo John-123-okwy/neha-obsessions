@@ -6,7 +6,7 @@ import styles from "./ProductCard.module.css";
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
   const rawImage = product.images?.[0] || product.image;
-  const imageSrc = getOptimizedUrl(rawImage, { width: 500, height: 375 });
+  const imageSrc = getOptimizedUrl(rawImage, { width: 500, height: 400 });
 
   return (
     <div className={styles.card}>
@@ -25,7 +25,6 @@ export default function ProductCard({ product }) {
           </button>
         </div>
       </div>
-      <div className={styles.zigzag} aria-hidden="true"></div>
     </div>
   );
 }

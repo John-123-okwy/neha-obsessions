@@ -1,3 +1,4 @@
+import { WhatsAppIcon } from "../Icons/Icons";
 import styles from "./WhatsAppButton.module.css";
 
 export default function WhatsAppButton() {
@@ -7,9 +8,9 @@ export default function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       className={styles.button}
-      aria-label="Order via WhatsApp"
+      aria-label="Chat with us on WhatsApp"
     >
-      WhatsApp
+      <WhatsAppIcon size={22} />
     </a>
   );
 }

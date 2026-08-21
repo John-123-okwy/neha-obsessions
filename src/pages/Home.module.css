@@ -1,31 +1,101 @@
 .featured {
-  padding:  var(--space-2xl) var(--space-lg);
-  max-width: 1100px;
-  margin: 0 auto;
+  padding: var(--space-3xl) 0 var(--space-2xl);
+}
+
+.sectionHead {
+  text-align: center;
+  padding: 0 var(--space-lg);
+  margin-bottom: var(--space-xl);
 }
 
 .title {
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
   color: var(--color-text-900);
-  margin: 0 0 var(--space-lg);
+  margin: 0 0 var(--space-sm);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: var(--space-lg);
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--color-magenta-500);
+  margin-bottom: var(--space-sm);
+}
+
+.dividerLine {
+  width: 32px;
+  height: 1px;
+  background: var(--color-lavender-100);
+}
+
+.tagline {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-600);
+  margin: 0;
+}
+
+.skeletonRow {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: hidden;
+  padding: 0 var(--space-lg);
 }
 
 .empty {
+  text-align: center;
   font-family: var(--font-body);
   color: var(--color-text-600);
-  text-align: center;
-  padding: var(--space-xl) 0;
+  padding: var(--space-lg);
 }
 
 .empty a {
   color: var(--color-purple-700);
   font-weight: 600;
+}
+
+.trustSection {
+  background: var(--color-lavender-100);
+  padding: var(--space-2xl) var(--space-lg);
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2xl);
+  flex-wrap: wrap;
+}
+
+.trustItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  color: var(--color-purple-700);
+  max-width: 220px;
+}
+
+.trustTitle {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-900);
+  margin: 0 0 2px;
+}
+
+.trustText {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-600);
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .trustSection {
+    gap: var(--space-lg);
+  }
+
+  .trustItem {
+    max-width: 100%;
+  }
 }

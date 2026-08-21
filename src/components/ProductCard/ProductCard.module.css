@@ -1,20 +1,19 @@
 .card {
-  background: var(--color-cream-50);
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  position: relative;
 }
 
 .card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-card-hover);
 }
 
 .imageWrap {
   display: block;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 4 / 3.2;
   overflow: hidden;
 }
 
@@ -22,25 +21,41 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.04);
 }
 
 .body {
   padding: var(--space-md);
 }
 
+.nameLink {
+  text-decoration: none;
+  color: inherit;
+}
+
 .name {
   font-family: var(--font-display);
+  font-weight: 600;
   font-size: 1.05rem;
-  margin: 0 0 var(--space-xs);
   color: var(--color-text-900);
+  margin: 0 0 6px;
+  line-height: 1.25;
 }
 
 .description {
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--color-text-600);
+  line-height: 1.5;
   margin: 0 0 var(--space-md);
-  min-height: 2.4em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .footer {
@@ -51,18 +66,19 @@
 
 .price {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 1.05rem;
   color: var(--color-purple-700);
 }
 
 .addBtn {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.85rem;
-  background: var(--color-magenta-500);
+  font-size: 0.78rem;
+  background: var(--color-purple-700);
   color: var(--color-white);
   border: none;
-  padding: 8px 18px;
+  padding: 7px 16px;
   border-radius: var(--radius-pill);
   cursor: pointer;
   transition: background 0.2s ease;
@@ -70,18 +86,4 @@
 
 .addBtn:hover {
   background: var(--color-purple-800);
-}
-
-/* Signature zigzag "torn ticket" edge — echoes the flier's pinned tags */
-.zigzag {
-  height: 12px;
-  background:
-    linear-gradient(135deg, var(--color-lavender-100) 25%, transparent 25%) -6px 0,
-    linear-gradient(225deg, var(--color-lavender-100) 25%, transparent 25%) -6px 0;
-  background-size: 12px 12px;
-  background-repeat: repeat-x;
-}
-.nameLink{
-  text-decoration: none;
-  color: inherit;
 }

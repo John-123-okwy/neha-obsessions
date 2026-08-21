@@ -3,26 +3,39 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--space-md);
-  padding: var(--space-sm) var(--space-lg);
-  background: var(--color-cream-50);
-  box-shadow: 0 2px 12px rgba(46, 16, 101, 0.08);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-white);
+  border-bottom: 1px solid rgba(46, 16, 101, 0.06);
   position: sticky;
   top: 0;
   z-index: 40;
 }
 
-.logoPill {
+.brand {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 10px;
+  text-decoration: none;
+}
+
+.mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: var(--color-purple-700);
   color: var(--color-white);
-  padding: 8px 18px;
-  border-radius: var(--radius-pill);
-  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wordmark {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--color-text-900);
+  letter-spacing: 0.01em;
 }
 
 .links {
@@ -33,7 +46,7 @@
 
 .navLink {
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.9rem;
   color: var(--color-text-900);
   text-decoration: none;
@@ -43,13 +56,39 @@
   color: var(--color-magenta-500);
 }
 
+.cartLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--color-text-900);
+  text-decoration: none;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: var(--color-magenta-500);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.65rem;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
 .orderBtn {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.85rem;
-  background: var(--color-magenta-500);
+  font-size: 0.82rem;
+  background: var(--color-purple-700);
   color: var(--color-white);
-  padding: 10px 20px;
+  padding: 9px 20px;
   border-radius: var(--radius-pill);
   text-decoration: none;
   transition: background 0.2s ease;
@@ -61,24 +100,19 @@
 
 @media (max-width: 480px) {
   .navbar {
-    flex-wrap: wrap;
-    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
   }
 
-  .logoPill span {
-    display: none;
+  .wordmark {
+    font-size: 0.9rem;
   }
 
   .links {
-    gap: var(--space-sm);
-  }
-
-  .navLink {
-    font-size: 0.85rem;
+    gap: var(--space-md);
   }
 
   .orderBtn {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     padding: 8px 14px;
   }
 }

@@ -21,11 +21,7 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(107, 33, 168, 0.88) 10%,
-    rgba(192, 38, 211, 0.82) 0%
-  );
+  background: var(--overlay-hero);
 }
 
 .caption {
@@ -73,4 +69,8 @@
     bottom: 88px;
     font-size: 0.85rem;
   }
+}
+
+@media(min-width:768px){
+  .caption{left:auto;right: 40px; transform: none;}
 }

@@ -1,0 +1,58 @@
+.track {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 4px var(--space-lg) var(--space-md);
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  flex: 0 0 auto;
+  width: min(78vw, 300px);
+  scroll-snap-align: start;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: var(--space-sm);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-lavender-100);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.dotActive {
+  background: var(--color-purple-700);
+  transform: scale(1.3);
+}
+
+@media (min-width: 900px) {
+  .track {
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: visible;
+    padding: 4px 0 0;
+  }
+
+  .slide {
+    width: 260px;
+  }
+
+  .dots {
+    display: none;
+  }
+}
