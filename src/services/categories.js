@@ -5,23 +5,20 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  query,
-  orderBy,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
 const categoriesRef = collection(db, "categories");
 
-// Fetch all categories (used by storefront nav/filters + admin dashboard)
 export async function getAllCategories() {
-  const snapshot = await getDocs(query(categoriesRef, orderBy("order")));
-  return snapshot.docs.map((docSnap) => ({
+  const snapshot = await getDocs(categoriesRef);
+  const categories = snapshot.docs.map((docSnap) => ({
     id: docSnap.id,
     ...docSnap.data(),
   }));
+  return categories.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 }
 
-// Create category (admin dashboard)
 export async function createCategory(categoryData) {
   const docRef = await addDoc(categoriesRef, {
     ...categoryData,
@@ -30,14 +27,10 @@ export async function createCategory(categoryData) {
   return docRef.id;
 }
 
-// Update category — e.g. rename, reorder (admin dashboard)
 export async function updateCategory(categoryId, updates) {
-  const docRef = doc(db, "categories", categoryId);
-  await updateDoc(docRef, updates);
+  await updateDoc(doc(db, "categories", categoryId), updates);
 }
 
-// Delete category (admin dashboard)
 export async function deleteCategory(categoryId) {
-  const docRef = doc(db, "categories", categoryId);
-  await deleteDoc(docRef);
+  await deleteDoc(doc(db, "categories", categoryId));
 }

@@ -1,13 +1,14 @@
 .wrapper {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: var(--space-lg);
+  padding: var(--space-xl) var(--space-lg) var(--space-2xl);
 }
 
 .backLink {
   display: inline-block;
   font-family: var(--font-body);
   font-weight: 600;
+  font-size: 0.85rem;
   color: var(--color-purple-700);
   text-decoration: none;
   margin-bottom: var(--space-lg);
@@ -16,7 +17,8 @@
 .layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-xl);
+  gap: var(--space-2xl);
+  align-items: start;
 }
 
 .image {
@@ -24,20 +26,22 @@
   border-radius: var(--radius-md);
   object-fit: cover;
   aspect-ratio: 1 / 1;
+  box-shadow: var(--shadow-card);
 }
 
 .name {
   font-family: var(--font-display);
-  font-size: 1.75rem;
-  margin: 0 0 var(--space-sm);
+  font-weight: 600;
+  font-size: 2rem;
   color: var(--color-text-900);
-
+  margin: 0 0 var(--space-sm);
+  line-height: 1.15;
 }
 
 .price {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.25rem;
+  font-weight: 600;
+  font-size: 1.3rem;
   color: var(--color-purple-700);
   margin: 0 0 var(--space-md);
 }
@@ -45,19 +49,31 @@
 .description {
   font-family: var(--font-body);
   color: var(--color-text-600);
-  line-height: 1.6;
-  margin-bottom: var(--space-lg);
+  line-height: 1.7;
+  margin-bottom: var(--space-xl);
 }
 
 .addBtn {
   font-family: var(--font-body);
   font-weight: 600;
-  background: var(--color-magenta-500);
+  font-size: 0.9rem;
+  background: var(--color-purple-700);
   color: var(--color-white);
   border: none;
-  padding: 14px 32px;
+  padding: 15px 34px;
   border-radius: var(--radius-pill);
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.addBtn:hover {
+  background: var(--color-purple-800);
+}
+
+.unavailableText {
+  font-family: var(--font-body);
+  color: var(--color-text-600);
+  font-style: italic;
 }
 
 .status {
@@ -67,17 +83,12 @@
   color: var(--color-text-600);
 }
 
-
-
-.unavailableText {
-  font-family: var(--font-body);
-  color: var(--color-text-600);
-  font-style: italic;
-}
-
-
 @media (max-width: 640px) {
   .layout {
     grid-template-columns: 1fr;
+  }
+
+  .name {
+    font-size: 1.5rem;
   }
 }

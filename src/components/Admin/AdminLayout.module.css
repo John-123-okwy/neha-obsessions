@@ -71,6 +71,26 @@
   border-left-color: var(--color-magenta-500);
 }
 
+.viewSiteBtn {
+  display: block;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  text-decoration: none;
+  margin-top: var(--space-md);
+}
+
+.viewSiteBtn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+
 .logoutBtn {
   font-family: var(--font-body);
   font-weight: 600;

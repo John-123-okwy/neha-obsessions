@@ -24,9 +24,11 @@
   gap: 8px;
   color: var(--color-purple-700);
   text-align: center;
+  text-decoration: none;
   flex: 1;
   min-width: 0;
 }
+
 
 .label {
   font-family: var(--font-body);

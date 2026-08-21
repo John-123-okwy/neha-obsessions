@@ -7,11 +7,15 @@ import { retryAsync } from "../utils/retry";
 import CustomSelect from "../components/CustomSelect/CustomSelect";
 import styles from "./Checkout.module.css";
 
+import LoadingOverlay from "../components/LoadingOverlay/LoadingOverlay";
+
 const PENDING_KEY = "neha-obsessions-pending-payment";
 
 export default function Checkout() {
   const { items, totalPrice: subtotal, clearCart } = useCart();
   const navigate = useNavigate();
+  
+  const [showRedirectOverlay, setShowRedirectOverlay] = useState(false);
 
   const [zones, setZones] = useState([]);
   const [zonesLoading, setZonesLoading] = useState(true);
@@ -128,7 +132,10 @@ export default function Checkout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearCart, navigate]);
 
-  function handlePayment() {
+ 
+ ////
+ 
+ function handlePayment() {
     if (!isFormValid()) {
       setError("Please fill in all required fields.");
       return;
@@ -136,6 +143,16 @@ export default function Checkout() {
     setError("");
     setProcessing(true);
     setStatusMessage("Waiting for payment…");
+    setShowRedirectOverlay(true);
+
+    const start = Date.now();
+    const checkInterval = setInterval(() => {
+      const iframeMounted = document.querySelector('iframe[src*="paystack"]');
+      if (iframeMounted || Date.now() - start > 4000) {
+        setShowRedirectOverlay(false);
+        clearInterval(checkInterval);
+      }
+    }, 150);
 
     const handler = window.PaystackPop.setup({
       key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
@@ -143,6 +160,7 @@ export default function Checkout() {
       amount: Math.round(grandTotal * 100),
       currency: "NGN",
       callback: (response) => {
+        setShowRedirectOverlay(false);
         const snapshot = {
           reference: response.reference,
           customer: { name: form.name, email: form.email, phone: form.phone },
@@ -154,13 +172,12 @@ export default function Checkout() {
           deliveryFee,
           totalPrice: grandTotal,
         };
-        // Save BEFORE anything else — this is the safety net.
         localStorage.setItem(PENDING_KEY, JSON.stringify(snapshot));
         setStatusMessage("Payment received — confirming…");
         attemptCompleteOrder(response.reference, snapshot);
       },
       onClose: () => {
-        // Popup closed without paying — nothing was ever charged, safe to just reset.
+        setShowRedirectOverlay(false);
         setProcessing(false);
         setStatusMessage("");
       },
@@ -168,6 +185,7 @@ export default function Checkout() {
 
     handler.openIframe();
   }
+ 
 
   if (items.length === 0 && !unresolved && !processing) {
     return <p className={styles.status}>Your cart is empty.</p>;
@@ -209,6 +227,8 @@ export default function Checkout() {
   }
 
   return (
+  <>
+  {showRedirectOverlay && <LoadingOverlay message="Redirecting you to a secure payment window…" />}
     <div className={styles.wrapper}>
       <h1 className={styles.title}>Checkout</h1>
 
@@ -307,5 +327,5 @@ export default function Checkout() {
         </div>
       </div>
     </div>
-  );
+ </> );
 }

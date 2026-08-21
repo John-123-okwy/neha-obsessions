@@ -1,45 +1,41 @@
 .wrapper {
-  padding: var(--space-2xl) var(--space-lg);
+  padding: var(--space-xl) var(--space-lg) var(--space-md);
   max-width: 1100px;
   margin: 0 auto;
 }
 
-.title {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  margin: 0 0 var(--space-lg);
-  color: var(--color-text-900);
-}
-
 .row {
   display: flex;
-  gap: var(--space-md);
+  gap: 10px;
   overflow-x: auto;
-  padding-bottom: var(--space-sm);
+  padding-bottom: 4px;
+  scrollbar-width: none;
 }
 
-.ticket {
+.row::-webkit-scrollbar {
+  display: none;
+}
+
+.pill {
   flex: 0 0 auto;
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 12px 24px;
-  background: var(--color-cream-50);
-  color: var(--color-purple-700);
-  border: 1.5px solid var(--color-purple-700);
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 10px 20px;
+  background: var(--color-white);
+  color: var(--color-text-900);
+  border: 1.5px solid var(--color-lavender-100);
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.ticket:hover {
-  background: var(--color-purple-700);
-  color: var(--color-white);
+.pill:hover {
+  border-color: var(--color-purple-700);
 }
 
-
-
-.ticketActive {
+.pillActive {
   background: var(--color-purple-700);
+  border-color: var(--color-purple-700);
   color: var(--color-white);
 }

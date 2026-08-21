@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { getAllProducts } from "../services/products";
 import { getAllCategories } from "../services/categories";
-
-import ProductCardSkeleton from "../components/Skeleton/ProductCardSkeleton";
 import CategoryStrip from "../components/CategoryStrip/CategoryStrip";
 import ProductCard from "../components/ProductCard/ProductCard";
+import ProductCardSkeleton from "../components/Skeleton/ProductCardSkeleton";
 import styles from "./Shop.module.css";
 
 export default function Shop() {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,12 +32,11 @@ export default function Shop() {
     loadData();
   }, []);
 
-  
-const availableProducts = products.filter((p) => p.available);
+  const availableProducts = products.filter((p) => p.available);
   const filteredProducts = activeCategory
     ? availableProducts.filter((p) => p.category === activeCategory)
     : availableProducts;
-  
+
   if (loading) {
     return (
       <div className={styles.grid}>
@@ -46,7 +46,6 @@ const availableProducts = products.filter((p) => p.available);
       </div>
     );
   }
-  
 
   return (
     <div>
@@ -57,9 +56,7 @@ const availableProducts = products.filter((p) => p.available);
       />
       <div className={styles.grid}>
         {filteredProducts.length === 0 ? (
-          <p className={styles.status}>
-            No products here yet — check back soon!
-          </p>
+          <p className={styles.status}>No products here yet — check back soon!</p>
         ) : (
           filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />

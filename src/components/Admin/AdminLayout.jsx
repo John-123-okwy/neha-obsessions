@@ -54,10 +54,13 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-
+<a href="/" target="_blank" rel="noopener noreferrer" className={styles.viewSiteBtn}>
+          View Storefront ↗
+        </a>
         <button className={styles.logoutBtn} onClick={handleLogout}>
           Log Out
         </button>
+        
       </aside>
 
       <div className={styles.main}>
