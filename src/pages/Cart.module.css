@@ -8,8 +8,7 @@
   font-family: var(--font-display);
   font-size: 1.5rem;
   margin-bottom: var(--space-lg);
-  color:var(--color-text-900);
-
+  color: var(--color-text-900);
 }
 
 .list {
@@ -97,9 +96,6 @@
 }
 
 .checkoutBtn {
-  display: block
-  ;
-  text-align: center;
   width: 100%;
   background: var(--color-magenta-500);
   color: var(--color-white);
@@ -122,4 +118,26 @@
   color: var(--color-purple-700);
   font-weight: 600;
   text-decoration: none;
+}
+@media (max-width: 480px) {
+  .row {
+    grid-template-columns: 56px 1fr;
+    grid-template-rows: auto auto;
+    row-gap: var(--space-sm);
+  }
+
+  .thumb {
+    width: 56px;
+    height: 56px;
+  }
+
+  .qtyControls {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+  }
+
+  .removeBtn {
+    grid-column: 1 / -1;
+    text-align: right;
+  }
 }

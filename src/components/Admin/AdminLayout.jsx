@@ -4,8 +4,6 @@ import { useAuth } from "../../context/AuthContext";
 import ChefHatLogo from "../Layout/ChefHatLogo";
 import styles from "./AdminLayout.module.css";
 
-
-
 const NAV_ITEMS = [
   { to: "/admin", label: "Dashboard", end: true },
   { to: "/admin/products", label: "Products" },
@@ -15,7 +13,6 @@ const NAV_ITEMS = [
   { to: "/admin/users", label: "Admin Users" },
   { to: "/admin/settings", label: "Settings" },
 ];
-
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -54,13 +51,13 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-<a href="/" target="_blank" rel="noopener noreferrer" className={styles.viewSiteBtn}>
+
+        <a href="/" target="_blank" rel="noopener noreferrer" className={styles.viewSiteBtn}>
           View Storefront ↗
         </a>
         <button className={styles.logoutBtn} onClick={handleLogout}>
           Log Out
         </button>
-        
       </aside>
 
       <div className={styles.main}>

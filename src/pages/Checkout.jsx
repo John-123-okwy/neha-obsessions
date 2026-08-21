@@ -5,17 +5,14 @@ import { createOrder, getOrderByReference } from "../services/orders";
 import { getAllDeliveryZones } from "../services/deliveryZones";
 import { retryAsync } from "../utils/retry";
 import CustomSelect from "../components/CustomSelect/CustomSelect";
-import styles from "./Checkout.module.css";
-
 import LoadingOverlay from "../components/LoadingOverlay/LoadingOverlay";
+import styles from "./Checkout.module.css";
 
 const PENDING_KEY = "neha-obsessions-pending-payment";
 
 export default function Checkout() {
   const { items, totalPrice: subtotal, clearCart } = useCart();
   const navigate = useNavigate();
-  
-  const [showRedirectOverlay, setShowRedirectOverlay] = useState(false);
 
   const [zones, setZones] = useState([]);
   const [zonesLoading, setZonesLoading] = useState(true);
@@ -32,7 +29,8 @@ export default function Checkout() {
   const [processing, setProcessing] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [error, setError] = useState("");
-  const [unresolved, setUnresolved] = useState(null); // holds the stuck snapshot, if any
+  const [unresolved, setUnresolved] = useState(null);
+  const [showRedirectOverlay, setShowRedirectOverlay] = useState(false);
 
   useEffect(() => {
     async function loadZones() {
@@ -43,7 +41,6 @@ export default function Checkout() {
     loadZones();
   }, []);
 
-  // On mount: if a previous session left an unresolved payment, resume it automatically
   useEffect(() => {
     const saved = localStorage.getItem(PENDING_KEY);
     if (saved) {
@@ -101,7 +98,6 @@ export default function Checkout() {
         return;
       }
 
-      // Idempotency check: has this exact payment already created an order?
       const existing = await getOrderByReference(reference);
       let orderId = existing?.id;
 
@@ -123,7 +119,6 @@ export default function Checkout() {
       clearCart();
       navigate(`/order-confirmation/${orderId}`);
     } catch (err) {
-      // We genuinely could not get a definitive answer — keep the reference saved.
       console.error("Could not confirm payment after retries:", err);
       setProcessing(false);
       setStatusMessage("");
@@ -132,10 +127,7 @@ export default function Checkout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearCart, navigate]);
 
- 
- ////
- 
- function handlePayment() {
+  function handlePayment() {
     if (!isFormValid()) {
       setError("Please fill in all required fields.");
       return;
@@ -145,47 +137,51 @@ export default function Checkout() {
     setStatusMessage("Waiting for payment…");
     setShowRedirectOverlay(true);
 
-    const start = Date.now();
-    const checkInterval = setInterval(() => {
-      const iframeMounted = document.querySelector('iframe[src*="paystack"]');
-      if (iframeMounted || Date.now() - start > 4000) {
-        setShowRedirectOverlay(false);
-        clearInterval(checkInterval);
-      }
-    }, 150);
+    // Simple, reliable safety timer — hides the bridge overlay shortly
+    // after Paystack's own popup has had time to take over the screen.
+    const overlayTimer = setTimeout(() => setShowRedirectOverlay(false), 1200);
 
-    const handler = window.PaystackPop.setup({
-      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
-      email: form.email,
-      amount: Math.round(grandTotal * 100),
-      currency: "NGN",
-      callback: (response) => {
-        setShowRedirectOverlay(false);
-        const snapshot = {
-          reference: response.reference,
-          customer: { name: form.name, email: form.email, phone: form.phone },
-          deliveryMethod: form.deliveryMethod,
-          address: form.deliveryMethod === "delivery" ? form.address : null,
-          deliveryZone: selectedZone ? { name: selectedZone.name, fee: selectedZone.fee } : null,
-          items,
-          subtotal,
-          deliveryFee,
-          totalPrice: grandTotal,
-        };
-        localStorage.setItem(PENDING_KEY, JSON.stringify(snapshot));
-        setStatusMessage("Payment received — confirming…");
-        attemptCompleteOrder(response.reference, snapshot);
-      },
-      onClose: () => {
-        setShowRedirectOverlay(false);
-        setProcessing(false);
-        setStatusMessage("");
-      },
-    });
-
-    handler.openIframe();
+    let handler;
+    try {
+      handler = window.PaystackPop.setup({
+        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+        email: form.email,
+        amount: Math.round(grandTotal * 100),
+        currency: "NGN",
+        callback: (response) => {
+          clearTimeout(overlayTimer);
+          setShowRedirectOverlay(false);
+          const snapshot = {
+            reference: response.reference,
+            customer: { name: form.name, email: form.email, phone: form.phone },
+            deliveryMethod: form.deliveryMethod,
+            address: form.deliveryMethod === "delivery" ? form.address : null,
+            deliveryZone: selectedZone ? { name: selectedZone.name, fee: selectedZone.fee } : null,
+            items,
+            subtotal,
+            deliveryFee,
+            totalPrice: grandTotal,
+          };
+          localStorage.setItem(PENDING_KEY, JSON.stringify(snapshot));
+          setStatusMessage("Payment received — confirming…");
+          attemptCompleteOrder(response.reference, snapshot);
+        },
+        onClose: () => {
+          clearTimeout(overlayTimer);
+          setShowRedirectOverlay(false);
+          setProcessing(false);
+          setStatusMessage("");
+        },
+      });
+      handler.openIframe();
+    } catch (err) {
+      console.error("Failed to open Paystack:", err);
+      clearTimeout(overlayTimer);
+      setShowRedirectOverlay(false);
+      setProcessing(false);
+      setError("Could not start payment. Please refresh and try again.");
+    }
   }
- 
 
   if (items.length === 0 && !unresolved && !processing) {
     return <p className={styles.status}>Your cart is empty.</p>;
@@ -227,105 +223,109 @@ export default function Checkout() {
   }
 
   return (
-  <>
-  {showRedirectOverlay && <LoadingOverlay message="Redirecting you to a secure payment window…" />}
-    <div className={styles.wrapper}>
-      <h1 className={styles.title}>Checkout</h1>
+    <>
+      {showRedirectOverlay && (
+        <LoadingOverlay message="Redirecting you to a secure payment window…" />
+      )}
 
-      <div className={styles.layout}>
-        <div className={styles.formSection}>
-          <label className={styles.label}>
-            Full Name *
-            <input className={styles.input} name="name" value={form.name} onChange={handleChange} />
-          </label>
+      <div className={styles.wrapper}>
+        <h1 className={styles.title}>Checkout</h1>
 
-          <label className={styles.label}>
-            Email *
-            <input className={styles.input} type="email" name="email" value={form.email} onChange={handleChange} />
-          </label>
+        <div className={styles.layout}>
+          <div className={styles.formSection}>
+            <label className={styles.label}>
+              Full Name *
+              <input className={styles.input} name="name" value={form.name} onChange={handleChange} />
+            </label>
 
-          <label className={styles.label}>
-            Phone *
-            <input className={styles.input} name="phone" value={form.phone} onChange={handleChange} />
-          </label>
+            <label className={styles.label}>
+              Email *
+              <input className={styles.input} type="email" name="email" value={form.email} onChange={handleChange} />
+            </label>
 
-          <label className={styles.label}>
-            Delivery Method
-            <CustomSelect
-              value={form.deliveryMethod}
-              onChange={(val) => setForm((prev) => ({ ...prev, deliveryMethod: val }))}
-              options={[
-                { value: "delivery", label: "Delivery" },
-                { value: "pickup", label: "Pickup" },
-              ]}
-            />
-          </label>
+            <label className={styles.label}>
+              Phone *
+              <input className={styles.input} name="phone" value={form.phone} onChange={handleChange} />
+            </label>
 
-          {form.deliveryMethod === "delivery" && (
-            <>
-              <label className={styles.label}>
-                Delivery Zone *
-                <CustomSelect
-                  value={form.zoneId}
-                  onChange={(val) => setForm((prev) => ({ ...prev, zoneId: val }))}
-                  placeholder={zonesLoading ? "Loading zones…" : "Select your area"}
-                  options={zones.map((zone) => ({
-                    value: zone.id,
-                    label: `${zone.name} — ₦${zone.fee.toLocaleString()}`,
-                  }))}
-                />
-              </label>
+            <label className={styles.label}>
+              Delivery Method
+              <CustomSelect
+                value={form.deliveryMethod}
+                onChange={(val) => setForm((prev) => ({ ...prev, deliveryMethod: val }))}
+                options={[
+                  { value: "delivery", label: "Delivery" },
+                  { value: "pickup", label: "Pickup" },
+                ]}
+              />
+            </label>
 
-              <label className={styles.label}>
-                Delivery Address *
-                <textarea className={styles.textarea} name="address" value={form.address} onChange={handleChange} />
-              </label>
-            </>
-          )}
+            {form.deliveryMethod === "delivery" && (
+              <>
+                <label className={styles.label}>
+                  Delivery Zone *
+                  <CustomSelect
+                    value={form.zoneId}
+                    onChange={(val) => setForm((prev) => ({ ...prev, zoneId: val }))}
+                    placeholder={zonesLoading ? "Loading zones…" : "Select your area"}
+                    options={zones.map((zone) => ({
+                      value: zone.id,
+                      label: `${zone.name} — ₦${zone.fee.toLocaleString()}`,
+                    }))}
+                  />
+                </label>
 
-          {error && <p className={styles.error}>{error}</p>}
-        </div>
+                <label className={styles.label}>
+                  Delivery Address *
+                  <textarea className={styles.textarea} name="address" value={form.address} onChange={handleChange} />
+                </label>
+              </>
+            )}
 
-        <div className={styles.summarySection}>
-          <h2 className={styles.summaryTitle}>Order Summary</h2>
-          {items.map((item) => (
-            <div key={item.id} className={styles.summaryRow}>
-              <span>{item.name} × {item.quantity}</span>
-              <span>₦{(item.price * item.quantity).toLocaleString()}</span>
-            </div>
-          ))}
-
-          <div className={styles.summaryDivider} />
-
-          <div className={styles.summaryRow}>
-            <span>Subtotal</span>
-            <span>₦{subtotal.toLocaleString()}</span>
+            {error && <p className={styles.error}>{error}</p>}
           </div>
 
-          {form.deliveryMethod === "pickup" ? (
-            <div className={styles.summaryRow}>
-              <span>Method</span>
-              <span>Pickup</span>
-            </div>
-          ) : (
-            <div className={styles.summaryRow}>
-              <span>Delivery Fee {selectedZone ? `(${selectedZone.name})` : ""}</span>
-              <span>{selectedZone ? `₦${deliveryFee.toLocaleString()}` : "Select a zone"}</span>
-            </div>
-          )}
+          <div className={styles.summarySection}>
+            <h2 className={styles.summaryTitle}>Order Summary</h2>
+            {items.map((item) => (
+              <div key={item.id} className={styles.summaryRow}>
+                <span>{item.name} × {item.quantity}</span>
+                <span>₦{(item.price * item.quantity).toLocaleString()}</span>
+              </div>
+            ))}
 
-          <div className={styles.summaryTotal}>
-            <span>Total</span>
-            <span>₦{grandTotal.toLocaleString()}</span>
+            <div className={styles.summaryDivider} />
+
+            <div className={styles.summaryRow}>
+              <span>Subtotal</span>
+              <span>₦{subtotal.toLocaleString()}</span>
+            </div>
+
+            {form.deliveryMethod === "pickup" ? (
+              <div className={styles.summaryRow}>
+                <span>Method</span>
+                <span>Pickup</span>
+              </div>
+            ) : (
+              <div className={styles.summaryRow}>
+                <span>Delivery Fee {selectedZone ? `(${selectedZone.name})` : ""}</span>
+                <span>{selectedZone ? `₦${deliveryFee.toLocaleString()}` : "Select a zone"}</span>
+              </div>
+            )}
+
+            <div className={styles.summaryTotal}>
+              <span>Total</span>
+              <span>₦{grandTotal.toLocaleString()}</span>
+            </div>
+
+            {statusMessage && <p className={styles.statusMessage}>{statusMessage}</p>}
+
+            <button className={styles.payBtn} onClick={handlePayment} disabled={processing}>
+              {processing ? "Processing…" : `Pay ₦${grandTotal.toLocaleString()}`}
+            </button>
           </div>
-
-          {statusMessage && <p className={styles.statusMessage}>{statusMessage}</p>}
-
-          <button className={styles.payBtn} onClick={handlePayment} disabled={processing}>
-            {processing ? "Processing…" : `Pay ₦${grandTotal.toLocaleString()}`}
-          </button>
         </div>
       </div>
-    </div>
- </> );
+    </>
+  );
 }
