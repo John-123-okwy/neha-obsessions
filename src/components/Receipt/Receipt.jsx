@@ -5,23 +5,24 @@ import styles from "./Receipt.module.css";
 
 const Receipt = forwardRef(function Receipt({ order }, ref) {
   const meta = STATUS_META[order.status] || STATUS_META.confirmed;
-  const dateStr = order.createdAt
-    ? new Date(order.createdAt).toLocaleString("en-NG", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      })
-    : "";
+  const paidAt = order.createdAt ? new Date(order.createdAt) : null;
+
+  const dateStr = paidAt
+    ? paidAt.toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })
+    : "—";
+  const timeStr = paidAt
+    ? paidAt.toLocaleTimeString("en-NG", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+    : "—";
 
   return (
     <div className={styles.receipt} ref={ref}>
       <div className={styles.brandRow}>
-        <div className={styles.logoBadge}>
-          <ChefHatLogo size={20} />
-        </div>
+        <span className={styles.logoBadge}><ChefHatLogo size={18} /></span>
         <span className={styles.brandName}>Neha Obsessions</span>
       </div>
 
-      <p className={styles.receiptLabel}>Payment Receipt</p>
+      <p className={styles.amountLabel}>Amount Paid</p>
+      <p className={styles.amount}>₦{Number(order.totalPrice).toLocaleString()}</p>
       <span
         className={styles.statusPill}
         style={{ background: `${meta.color}1A`, color: meta.color }}
@@ -29,43 +30,22 @@ const Receipt = forwardRef(function Receipt({ order }, ref) {
         {meta.label}
       </span>
 
-      <div className={styles.metaGrid}>
-        <div>
-          <p className={styles.metaLabel}>Order ID</p>
-          <p className={styles.metaValue}>{order.id}</p>
-        </div>
-        <div>
-          <p className={styles.metaLabel}>Date</p>
-          <p className={styles.metaValue}>{dateStr}</p>
-        </div>
+      <div className={styles.divider} />
+
+      <div className={styles.detailRow}><span>Order ID</span><span>{order.id}</span></div>
+      <div className={styles.detailRow}><span>Date</span><span>{dateStr}</span></div>
+      <div className={styles.detailRow}><span>Time</span><span>{timeStr}</span></div>
+      <div className={styles.detailRow}><span>Customer</span><span>{order.customer?.name}</span></div>
+      <div className={styles.detailRow}><span>Phone</span><span>{order.customer?.phone}</span></div>
+      <div className={styles.detailRow}>
+        <span>{order.deliveryMethod === "pickup" ? "Method" : "Delivery"}</span>
+        <span>{order.deliveryMethod === "pickup" ? "Pickup" : order.deliveryZone?.name || "Delivery"}</span>
       </div>
 
       <div className={styles.divider} />
 
-      <p className={styles.sectionTitle}>Billed To</p>
-      <p className={styles.line}>{order.customer?.name}</p>
-      <p className={styles.line}>{order.customer?.email}</p>
-      <p className={styles.line}>{order.customer?.phone}</p>
-
-      <div className={styles.divider} />
-
-      <p className={styles.sectionTitle}>
-        {order.deliveryMethod === "pickup" ? "Pickup" : "Delivery"}
-      </p>
-      {order.deliveryMethod === "pickup" ? (
-        <p className={styles.line}>Customer pickup</p>
-      ) : (
-        <>
-          {order.deliveryZone && <p className={styles.line}>{order.deliveryZone.name}</p>}
-          {order.address && <p className={styles.line}>{order.address}</p>}
-        </>
-      )}
-
-      <div className={styles.divider} />
-
-      <p className={styles.sectionTitle}>Items</p>
       {order.items?.map((item) => (
-        <div key={item.id} className={styles.itemRow}>
+        <div key={item.id} className={styles.detailRow}>
           <span>{item.name} × {item.quantity}</span>
           <span>₦{(item.price * item.quantity).toLocaleString()}</span>
         </div>
@@ -73,26 +53,23 @@ const Receipt = forwardRef(function Receipt({ order }, ref) {
 
       <div className={styles.divider} />
 
-      <div className={styles.itemRow}>
+      <div className={styles.detailRow}>
         <span>Subtotal</span>
         <span>₦{Number(order.subtotal ?? order.totalPrice).toLocaleString()}</span>
       </div>
       {order.deliveryMethod === "delivery" && (
-        <div className={styles.itemRow}>
+        <div className={styles.detailRow}>
           <span>Delivery Fee</span>
           <span>₦{Number(order.deliveryFee || 0).toLocaleString()}</span>
         </div>
       )}
       <div className={styles.totalRow}>
-        <span>Total Paid</span>
+        <span>Total</span>
         <span>₦{Number(order.totalPrice).toLocaleString()}</span>
       </div>
 
       <p className={styles.refLine}>Ref: {order.paymentReference}</p>
-
-      <div className={styles.thanksBox}>
-        Thank you for choosing Neha Obsessions — every bite tells you why we're called Obsessions. 💜
-      </div>
+      <p className={styles.thanks}>Thank you for choosing Neha Obsessions 💜</p>
 
       <div className={styles.zigzagTop} aria-hidden="true" />
       <p className={styles.footer}>Powered by The Excel Foundation</p>

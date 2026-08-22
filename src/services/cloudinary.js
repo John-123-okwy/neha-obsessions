@@ -1,8 +1,11 @@
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
-// Uploads a raw file (from an <input type="file">) to Cloudinary, returns the hosted URL
 export async function uploadImage(file) {
+  if (!CLOUD_NAME || !UPLOAD_PRESET) {
+    throw new Error("Cloudinary is not configured — check your environment variables.");
+  }
+
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", UPLOAD_PRESET);
@@ -12,15 +15,17 @@ export async function uploadImage(file) {
     { method: "POST", body: formData }
   );
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error("Image upload failed");
+    const message = data?.error?.message || "Image upload failed";
+    console.error("Cloudinary upload error:", message);
+    throw new Error(message);
   }
 
-  const data = await response.json();
   return data.secure_url;
 }
 
-// Rewrites a Cloudinary URL to request a resized, optimized, smart-cropped version
 export function getOptimizedUrl(url, { width, height, crop = "fill" } = {}) {
   if (!url || !url.includes("/upload/")) return url;
   const transform = `w_${width},h_${height},c_${crop},g_auto,q_auto,f_auto`;
