@@ -56,6 +56,18 @@
   color: var(--color-magenta-500);
 }
 
+.adminLink {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--color-magenta-500);
+  text-decoration: none;
+}
+
+.adminLink:hover {
+  color: var(--color-purple-800);
+}
+
 .cartLink {
   position: relative;
   display: flex;
@@ -82,20 +94,18 @@
   padding: 0 3px;
 }
 
-.orderBtn {
+.logoutBtn {
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.82rem;
-  background: var(--color-purple-700);
-  color: var(--color-white);
-  padding: 9px 20px;
-  border-radius: var(--radius-pill);
-  text-decoration: none;
-  transition: background 0.2s ease;
+  font-size: 0.8rem;
+  background: none;
+  border: none;
+  color: var(--color-text-600);
+  cursor: pointer;
 }
 
-.orderBtn:hover {
-  background: var(--color-purple-800);
+.logoutBtn:hover {
+  color: #DC2626;
 }
 
 @media (max-width: 480px) {
@@ -111,8 +121,7 @@
     gap: var(--space-md);
   }
 
-  .orderBtn {
-    font-size: 0.75rem;
-    padding: 8px 14px;
+  .logoutBtn {
+    font-size: 0.72rem;
   }
 }

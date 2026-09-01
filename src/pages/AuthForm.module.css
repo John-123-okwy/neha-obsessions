@@ -1,0 +1,90 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.input {
+  width: 100%;
+  font-family: var(--font-body);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-lavender-100);
+  font-size: 0.95rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-purple-700);
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-text-600);
+  margin: 4px 0;
+  cursor: pointer;
+}
+
+.checkboxRow input {
+  margin-top: 2px;
+  accent-color: var(--color-purple-700);
+}
+
+.forgotLink {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--color-purple-700);
+  cursor: pointer;
+  padding: 0;
+}
+
+.error {
+  color: #DC2626;
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+}
+
+.notice {
+  color: #16A34A;
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+}
+
+.submitBtn {
+  background: var(--color-purple-700);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.switchText {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-600);
+  margin-top: var(--space-md);
+}
+
+.switchLink {
+  color: var(--color-purple-700);
+  font-weight: 600;
+  text-decoration: none;
+}

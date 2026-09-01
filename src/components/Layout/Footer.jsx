@@ -21,7 +21,6 @@ export default function Footer() {
 
       <div className={styles.bottom}>
         <span>© {new Date().getFullYear()} Neha Obsessions</span>
-        <Link to="/admin/login" className={styles.adminLink}>Admin</Link>
       </div>
     </footer>
   );
