@@ -27,7 +27,7 @@ export default function Navbar() {
       <div className={styles.links}>
         <Link to="/shop" className={styles.navLink}>Shop</Link>
         <Link to="/orders" className={styles.navLink}>Orders</Link>
-        <Link to="/account" className={styles.navLink}>Account</Link>
+        {/*<Link to="/account" className={styles.navLink}>Account</Link>*/}
         {isAdmin && (
           <Link to="/admin" className={styles.adminLink}>Admin</Link>
         )}
