@@ -19,16 +19,23 @@ export default function OrdersHistory() {
   const { currentUser } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
     async function loadOrders() {
-      if (!currentUser) return;
+      if (!currentUser) {
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
+      setError("");
       try {
         const data = await getOrdersByCustomerId(currentUser.uid);
         setOrders(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
       } catch (err) {
         console.error("Failed to load orders:", err);
+        setError("Couldn't load your orders right now. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -65,6 +72,11 @@ export default function OrdersHistory() {
           {Array.from({ length: 2 }).map((_, i) => (
             <Skeleton key={i} height="220px" radius="16px" style={{ marginBottom: "16px" }} />
           ))}
+        </div>
+      ) : error ? (
+        <div className={styles.emptyState}>
+          <p className={styles.emptyTitle}>Something went wrong</p>
+          <p className={styles.emptyText}>{error}</p>
         </div>
       ) : filteredOrders.length === 0 ? (
         <div className={styles.emptyState}>
