@@ -14,7 +14,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderTracking from "./pages/OrderTracking";
-//import OrdersHistory from "./pages/OrdersHistory";
+import OrdersHistory from "./pages/OrdersHistory";
 //import Account from "./pages/Account";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./components/Admin/AdminLayout";
@@ -96,7 +96,7 @@ function App() {
               path="/orders"
               element={
                 <RequireCustomerAuth>
-                  <Layout>{/*<OrdersHistory/>*/}</Layout>
+                  <Layout><OrdersHistory/></Layout>
                 </RequireCustomerAuth>
               }
             />

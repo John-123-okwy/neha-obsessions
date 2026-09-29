@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getOrdersByCustomerId } from "../services/orders";
+import { getOrderById } from "../services/orders";
 import { ORDER_STATUS } from "../utils/constants";
 import OrderCard from "../components/OrdersHistory/OrderCard";
 import Skeleton from "../components/Skeleton/Skeleton";
@@ -31,10 +31,10 @@ export default function OrdersHistory() {
       setLoading(true);
       setError("");
       try {
-        const data = await getOrdersByCustomerId(currentUser.uid);
+        const data = await getOrderById(currentUser.uid);
         setOrders(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
       } catch (err) {
-        console.error("Failed to load orders:", err);
+        console.error("Failed to lcoad orders:", err);
         setError("Couldn't load your orders right now. Please try again.");
       } finally {
         setLoading(false);
