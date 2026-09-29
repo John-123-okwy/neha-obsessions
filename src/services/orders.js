@@ -86,3 +86,10 @@ export async function getOrderByReference(reference) {
   const docSnap = snapshot.docs[0];
   return { id: docSnap.id, ...docSnap.data() };
 }
+
+//////////
+export async function getOrdersByCustomerId(customerId) {
+  const q = query(ordersRef, where("customerId", "==", customerId));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
