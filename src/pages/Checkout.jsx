@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import { createOrder, getOrderByReference } from "../services/orders";
 import { getAllDeliveryZones } from "../services/deliveryZones";
+import { updateCustomerProfile } from "../services/customers";
 import { retryAsync } from "../utils/retry";
 import { generatePaymentReference } from "../utils/paymentReference";
 import CustomSelect from "../components/CustomSelect/CustomSelect";
@@ -13,6 +15,7 @@ const PENDING_KEY = "neha-obsessions-pending-payment";
 
 export default function Checkout() {
   const { items, totalPrice: subtotal, clearCart } = useCart();
+  const { currentUser, customerProfile, refreshProfile } = useAuth();
   const navigate = useNavigate();
 
   const [zones, setZones] = useState([]);
@@ -26,6 +29,7 @@ export default function Checkout() {
     deliveryMethod: "delivery",
     zoneId: "",
   });
+  const [saveDetails, setSaveDetails] = useState(false);
 
   const [processing, setProcessing] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
@@ -41,6 +45,18 @@ export default function Checkout() {
     }
     loadZones();
   }, []);
+
+  useEffect(() => {
+    if (currentUser && customerProfile) {
+      setForm((prev) => ({
+        ...prev,
+        name: customerProfile.name || prev.name,
+        email: currentUser.email || prev.email,
+        phone: customerProfile.phone || prev.phone,
+        address: customerProfile.address || prev.address,
+      }));
+    }
+  }, [currentUser, customerProfile]);
 
   async function verifyReference(reference) {
     const res = await fetch("/api/verify-payment", {
@@ -60,6 +76,8 @@ export default function Checkout() {
     setUnresolved(null);
     setProcessing(true);
 
+    let orderId = null;
+
     try {
       const result = await retryAsync(() => verifyReference(reference), {
         retries: 4,
@@ -77,11 +95,12 @@ export default function Checkout() {
       }
 
       const existing = await getOrderByReference(reference);
-      let orderId = existing?.id;
+      orderId = existing?.id;
 
       if (!orderId) {
         orderId = await createOrder({
           customer: snapshot.customer,
+          customerId: snapshot.customerId,
           deliveryMethod: snapshot.deliveryMethod,
           address: snapshot.address,
           deliveryZone: snapshot.deliveryZone,
@@ -92,41 +111,65 @@ export default function Checkout() {
           paymentReference: reference,
         });
       }
-
-      localStorage.removeItem(PENDING_KEY);
-      clearCart();
-      navigate(`/order-confirmation/${orderId}`);
     } catch (err) {
+      // Verification or order creation itself failed — genuinely unresolved.
       console.error("Could not confirm payment after retries:", err);
       setProcessing(false);
       setStatusMessage("");
       setUnresolved(snapshot);
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clearCart, navigate]);
 
-  // Resume flow: handles BOTH the normal iframe callback AND the case where
-  // Paystack did a full-page redirect back to us (common on some mobile browsers).
+    // Order is confirmed and saved at this point. Saving profile details is a
+    // nice-to-have — its failure must NEVER block the receipt from showing.
+    if (snapshot.customerId && snapshot.saveDetails) {
+      try {
+        const profileUpdate = {
+          name: snapshot.customer.name,
+          phone: snapshot.customer.phone,
+        };
+        if (snapshot.address) {
+          profileUpdate.address = snapshot.address;
+        }
+        await updateCustomerProfile(snapshot.customerId, profileUpdate);
+        await refreshProfile();
+      } catch (profileErr) {
+        console.error("Saving profile details failed (non-critical):", profileErr);
+      }
+    }
+
+    localStorage.removeItem(PENDING_KEY);
+    clearCart();
+    navigate(`/order-confirmation/${orderId}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clearCart, navigate, refreshProfile]);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const urlReference = params.get("reference") || params.get("trxref");
     const saved = localStorage.getItem(PENDING_KEY);
 
-    if (urlReference && saved) {
+    if (saved) {
       const snapshot = JSON.parse(saved);
-      if (snapshot.reference === urlReference) {
+      const ageMs = Date.now() - (snapshot.createdAt || 0);
+      const FIFTEEN_MINUTES = 15 * 60 * 1000;
+
+      if (ageMs > FIFTEEN_MINUTES) {
+        localStorage.removeItem(PENDING_KEY);
+        return;
+      }
+
+      if (urlReference && snapshot.reference === urlReference) {
         window.history.replaceState({}, "", "/checkout");
         setStatusMessage("Confirming your payment…");
         attemptCompleteOrder(urlReference, snapshot);
         return;
       }
-    }
 
-    // No URL reference, but a pending payment exists from an earlier session
-    if (saved && !urlReference) {
-      const snapshot = JSON.parse(saved);
-      setStatusMessage("Finishing your last payment…");
-      attemptCompleteOrder(snapshot.reference, snapshot);
+      if (!urlReference) {
+        setStatusMessage("Finishing your last payment…");
+        attemptCompleteOrder(snapshot.reference, snapshot);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -165,7 +208,9 @@ export default function Checkout() {
     const reference = generatePaymentReference();
     const snapshot = {
       reference,
+      createdAt: Date.now(),
       customer: { name: form.name, email: form.email, phone: form.phone },
+      customerId: currentUser?.uid || null,
       deliveryMethod: form.deliveryMethod,
       address: form.deliveryMethod === "delivery" ? form.address : null,
       deliveryZone: selectedZone ? { name: selectedZone.name, fee: selectedZone.fee } : null,
@@ -173,10 +218,9 @@ export default function Checkout() {
       subtotal,
       deliveryFee,
       totalPrice: grandTotal,
+      saveDetails,
     };
 
-    // Saved BEFORE Paystack ever opens — this is what makes recovery possible
-    // even if the browser fully navigates away and JS state is lost.
     localStorage.setItem(PENDING_KEY, JSON.stringify(snapshot));
 
     const overlayTimer = setTimeout(() => setShowRedirectOverlay(false), 1200);
@@ -243,6 +287,15 @@ export default function Checkout() {
           >
             Contact us on WhatsApp instead
           </a>
+          <button
+            className={styles.dismissBtn}
+            onClick={() => {
+              localStorage.removeItem(PENDING_KEY);
+              setUnresolved(null);
+            }}
+          >
+            Dismiss and return to shop
+          </button>
         </div>
       </div>
     );
@@ -307,6 +360,15 @@ export default function Checkout() {
                 </label>
               </>
             )}
+
+            <label className={styles.checkboxRow}>
+              <input
+                type="checkbox"
+                checked={saveDetails}
+                onChange={(e) => setSaveDetails(e.target.checked)}
+              />
+              <span>Save these details for next time</span>
+            </label>
 
             {error && <p className={styles.error}>{error}</p>}
           </div>
