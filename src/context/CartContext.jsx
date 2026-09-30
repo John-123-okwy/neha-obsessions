@@ -17,24 +17,34 @@ export function CartProvider({ children }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }, [items]);
 
-  function addToCart(product, quantity = 1) {
+  // customization (optional) shape: { cartKey, total, summary, message, referenceImage, requiresConfirmation }
+  function addToCart(product, quantity = 1, customization = null) {
+    const key = customization ? customization.cartKey : product.id;
+
     setItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => item.id === key);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+          item.id === key ? { ...item, quantity: item.quantity + quantity } : item
         );
       }
       return [
         ...prev,
         {
-          id: product.id,
+          id: key,
+          productId: product.id,
           name: product.name,
-          price: product.price,
+          price: customization ? customization.total : product.price,
           image: product.images?.[0] || product.image || "",
           quantity,
+          customization: customization
+            ? {
+                summary: customization.summary,
+                message: customization.message || "",
+                referenceImage: customization.referenceImage || "",
+                requiresConfirmation: customization.requiresConfirmation || false,
+              }
+            : null,
         },
       ];
     });
@@ -78,4 +88,4 @@ export function CartProvider({ children }) {
 
 export function useCart() {
   return useContext(CartContext);
-}
+}0

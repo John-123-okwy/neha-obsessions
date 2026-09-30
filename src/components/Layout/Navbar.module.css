@@ -93,7 +93,7 @@
 
 .cartBadge {
   position: absolute;
-  top: -8px;
+  top: -5px;
   right: -10px;
   background: var(--color-magenta-500);
   color: var(--color-white);

@@ -45,12 +45,20 @@ export default function OrderRow({ order }) {
         <div className={styles.headerRight}>
           <span className={styles.date}>{formattedDate}</span>
           <span className={styles.total}>₦{Number(order.totalPrice).toLocaleString()}</span>
-          <span
+       <span
             className={styles.badge}
             style={{ background: `${meta.color}1A`, color: meta.color }}
           >
             {meta.label}
           </span>
+          {order.items?.some((i) => i.customization?.requiresConfirmation) && (
+            <span
+              className={styles.badge}
+              style={{ background: "#FEF3C7", color: "#B45309" }}
+            >
+              Needs Confirmation
+            </span>
+          )}
           <span className={`${styles.chevron} ${expanded ? styles.chevronOpen : ""}`}>
             ▾
           </span>
@@ -61,12 +69,38 @@ export default function OrderRow({ order }) {
         <div className={styles.body}>
           <div className={styles.section}>
             <h4 className={styles.sectionTitle}>Items</h4>
+            
             {order.items?.map((item) => (
-              <div key={item.id} className={styles.itemRow}>
-                <span>{item.name} × {item.quantity}</span>
-                <span>₦{(item.price * item.quantity).toLocaleString()}</span>
+              <div key={item.id}>
+                <div className={styles.itemRow}>
+                  <span>{item.name} × {item.quantity}</span>
+                  <span>₦{(item.price * item.quantity).toLocaleString()}</span>
+                </div>
+                {item.customization?.summary?.length > 0 && (
+                  <p className={styles.detailLine} style={{ fontSize: "0.78rem", opacity: 0.8 }}>
+                    {item.customization.summary.map((s) => `${s.groupName}: ${s.optionLabel}`).join(" · ")}
+                  </p>
+                )}
+                {item.customization?.message && (
+                  <p className={styles.detailLine} style={{ fontSize: "0.78rem", opacity: 0.8 }}>
+                    Message: "{item.customization.message}"
+                  </p>
+                )}
+                {item.customization?.referenceImage && (
+                  <a
+                    href={item.customization.referenceImage}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.detailLine}
+                    style={{ fontSize: "0.78rem", color: "var(--color-purple-700)" }}
+                  >
+                    View reference image ↗
+                  </a>
+                )}
               </div>
             ))}
+            
+            
           </div>
 
           <div className={styles.section}>

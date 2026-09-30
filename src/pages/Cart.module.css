@@ -6,9 +6,10 @@
 
 .title {
   font-family: var(--font-display);
+  font-weight: 600;
   font-size: 1.5rem;
-  margin-bottom: var(--space-lg);
   color: var(--color-text-900);
+  margin-bottom: var(--space-lg);
 }
 
 .list {
@@ -23,9 +24,10 @@
   grid-template-columns: 64px 1fr auto auto;
   align-items: center;
   gap: var(--space-md);
-  background: var(--color-cream-50);
+  background: var(--color-white);
   padding: var(--space-md);
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
 }
 
 .thumb {
@@ -35,10 +37,34 @@
   border-radius: var(--radius-sm);
 }
 
+.details {
+  min-width: 0;
+}
+
 .name {
   font-family: var(--font-body);
   font-weight: 600;
+  color: var(--color-text-900);
   margin: 0;
+}
+
+.customizationNote {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-600);
+  margin: 2px 0;
+}
+
+.confirmBadge {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #B45309;
+  background: #FEF3C7;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 2px;
 }
 
 .price {
@@ -96,7 +122,9 @@
 }
 
 .checkoutBtn {
+  display: block;
   width: 100%;
+  text-align: center;
   background: var(--color-magenta-500);
   color: var(--color-white);
   font-family: var(--font-body);
@@ -105,6 +133,8 @@
   border: none;
   border-radius: var(--radius-pill);
   cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 .empty {
@@ -119,6 +149,7 @@
   font-weight: 600;
   text-decoration: none;
 }
+
 @media (max-width: 480px) {
   .row {
     grid-template-columns: 56px 1fr;

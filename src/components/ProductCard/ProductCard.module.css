@@ -3,11 +3,10 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: box-shadow 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-card-hover);
 }
 
@@ -86,4 +85,21 @@
 
 .addBtn:hover {
   background: var(--color-purple-800);
+}
+
+.customizeBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  background: var(--color-white);
+  color: var(--color-purple-700);
+  border: 1.5px solid var(--color-purple-700);
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.customizeBtn:hover {
+  background: var(--color-lavender-100);
 }

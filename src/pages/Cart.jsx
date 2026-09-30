@@ -24,6 +24,14 @@ export default function Cart() {
             <img src={item.image} alt={item.name} className={styles.thumb} />
             <div className={styles.details}>
               <p className={styles.name}>{item.name}</p>
+              {item.customization?.summary?.length > 0 && (
+                <p className={styles.customizationNote}>
+                  {item.customization.summary.map((s) => s.optionLabel).join(" • ")}
+                </p>
+              )}
+              {item.customization?.requiresConfirmation && (
+                <span className={styles.confirmBadge}>Needs confirmation</span>
+              )}
               <p className={styles.price}>₦{Number(item.price).toLocaleString()}</p>
             </div>
             <div className={styles.qtyControls}>

@@ -83,6 +83,24 @@
   color: var(--color-text-600);
 }
 
+.customizeBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: var(--color-white);
+  color: var(--color-purple-700);
+  border: 1.5px solid var(--color-purple-700);
+  padding: 14px 32px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.customizeBtn:hover {
+  background: var(--color-lavender-100);
+}
+
+
+
 @media (max-width: 640px) {
   .layout {
     grid-template-columns: 1fr;

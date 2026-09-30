@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { getProductById } from "../services/products";
 import { useCart } from "../context/CartContext";
 import { getOptimizedUrl } from "../services/cloudinary";
+import CustomizeWizard from "../components/Customize/CustomizeWizard";
 import Skeleton from "../components/Skeleton/Skeleton";
 import styles from "./ProductDetail.module.css";
 
@@ -11,6 +12,7 @@ export default function ProductDetail() {
   const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [wizardOpen, setWizardOpen] = useState(false);
 
   useEffect(() => {
     async function loadProduct() {
@@ -40,6 +42,12 @@ export default function ProductDetail() {
 
   if (!product) return <p className={styles.status}>Product not found.</p>;
 
+  const hasCustomization =
+    product.isCustomizable &&
+    (product.customizationGroups || []).some(
+      (g) => g.enabled && g.options.some((o) => o.enabled)
+    );
+
   return (
     <div className={styles.wrapper}>
       <Link to="/shop" className={styles.backLink}>← Back to Shop</Link>
@@ -51,18 +59,28 @@ export default function ProductDetail() {
         />
         <div className={styles.info}>
           <h1 className={styles.name}>{product.name}</h1>
-          <p className={styles.price}>₦{Number(product.price).toLocaleString()}</p>
+          <p className={styles.price}>
+            {hasCustomization ? "From " : ""}₦{Number(product.price).toLocaleString()}
+          </p>
           <p className={styles.description}>{product.description}</p>
 
-          {product.available ? (
+          {!product.available ? (
+            <p className={styles.unavailableText}>Currently unavailable — check back soon.</p>
+          ) : hasCustomization ? (
+            <button className={styles.customizeBtn} onClick={() => setWizardOpen(true)}>
+              Customize This Cake
+            </button>
+          ) : (
             <button className={styles.addBtn} onClick={() => addToCart(product)}>
               Add to Cart
             </button>
-          ) : (
-            <p className={styles.unavailableText}>Currently unavailable — check back soon.</p>
           )}
         </div>
       </div>
+
+      {wizardOpen && (
+        <CustomizeWizard product={product} onClose={() => setWizardOpen(false)} />
+      )}
     </div>
   );
 }

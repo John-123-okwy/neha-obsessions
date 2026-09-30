@@ -1,0 +1,196 @@
+.wrapper {
+  border-top: 1px solid var(--color-lavender-100);
+  padding-top: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.sectionLabel {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-text-900);
+  margin: 0 0 var(--space-sm);
+}
+
+.emptyHint {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-text-600);
+  margin: 0 0 var(--space-md);
+}
+
+.groupCard {
+  background: var(--color-lavender-100);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.groupHeader {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.groupNameInput {
+  flex: 1;
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1.5px solid var(--color-white);
+  font-size: 0.85rem;
+}
+
+.removeGroupBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.7rem;
+  background: none;
+  color: #DC2626;
+  border: 1px solid #FEE2E2;
+  border-radius: 6px;
+  padding: 0 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.groupToggles {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: 8px;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--color-text-900);
+  cursor: pointer;
+}
+
+.toggleRow input {
+  accent-color: var(--color-purple-700);
+}
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.optionRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-white);
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.optionLabelInput {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 6px 8px;
+  border-radius: 5px;
+  border: 1px solid var(--color-lavender-100);
+}
+
+.optionPriceWrap {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.pricePrefix {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-text-600);
+}
+
+.optionPriceInput {
+  width: 64px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  padding: 6px 4px;
+  border-radius: 5px;
+  border: 1px solid var(--color-lavender-100);
+}
+
+.optionToggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  color: var(--color-text-600);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.optionToggle input {
+  accent-color: var(--color-purple-700);
+  margin-bottom: 1px;
+}
+
+.removeOptionBtn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-600);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px;
+}
+
+.addOptionBtn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  background: var(--color-white);
+  color: var(--color-purple-700);
+  border: 1px dashed var(--color-purple-700);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.addGroupBtn {
+  display: block;
+  width: 100%;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  background: var(--color-white);
+  color: var(--color-purple-700);
+  border: 1.5px dashed var(--color-purple-700);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.extrasSection {
+  border-top: 1px solid var(--color-lavender-100);
+  padding-top: var(--space-md);
+  margin-top: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 420px) {
+  .optionRow {
+    flex-wrap: wrap;
+  }
+
+  .optionLabelInput {
+    flex-basis: 100%;
+  }
+}

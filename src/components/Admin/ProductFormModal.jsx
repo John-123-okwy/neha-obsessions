@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { createProduct, updateProduct } from "../../services/products";
 import ImageUploader from "./ImageUploader";
-import styles from "./ProductFormModal.module.css";
-
 import CustomSelect from "../CustomSelect/CustomSelect";
+import CustomizationGroupsEditor from "./CustomizationGroupsEditor";
+import styles from "./ProductFormModal.module.css";
 
 const EMPTY_FORM = {
   name: "",
@@ -13,7 +13,10 @@ const EMPTY_FORM = {
   images: [],
   available: true,
   isCustomizable: false,
-  featured:false,
+  featured: false,
+  customizationGroups: [],
+  allowMessage: true,
+  allowReferenceImage: true,
 };
 
 export default function ProductFormModal({ isOpen, onClose, editingProduct, categories, onSaved }) {
@@ -32,6 +35,9 @@ export default function ProductFormModal({ isOpen, onClose, editingProduct, cate
         available: editingProduct.available ?? true,
         isCustomizable: editingProduct.isCustomizable || false,
         featured: editingProduct.featured || false,
+        customizationGroups: editingProduct.customizationGroups || [],
+        allowMessage: editingProduct.allowMessage ?? true,
+        allowReferenceImage: editingProduct.allowReferenceImage ?? true,
       });
     } else {
       setForm(EMPTY_FORM);
@@ -51,12 +57,23 @@ export default function ProductFormModal({ isOpen, onClose, editingProduct, cate
       return;
     }
 
+    if (form.isCustomizable) {
+      const invalidGroup = form.customizationGroups.find(
+        (g) => !g.name.trim() || g.options.length === 0 || g.options.some((o) => !o.label.trim())
+      );
+      if (invalidGroup) {
+        setError("Every customization group needs a name and every option needs a label.");
+        return;
+      }
+    }
+
     setSaving(true);
     setError("");
 
     const payload = {
       ...form,
       price: Number(form.price),
+      customizationGroups: form.isCustomizable ? form.customizationGroups : [],
     };
 
     try {
@@ -108,7 +125,6 @@ export default function ProductFormModal({ isOpen, onClose, editingProduct, cate
             />
           </label>
 
-          
           <label className={styles.label}>
             Category
             <CustomSelect
@@ -117,10 +133,10 @@ export default function ProductFormModal({ isOpen, onClose, editingProduct, cate
               placeholder="Select a category"
               options={categories.map((cat) => ({ value: cat.slug, label: cat.label }))}
             />
-          </label>          
-          
+          </label>
+
           <label className={styles.label}>
-            Price (₦)
+            {form.isCustomizable ? "Base Price (₦)" : "Price (₦)"}
             <input
               className={styles.input}
               type="number"
@@ -158,7 +174,7 @@ export default function ProductFormModal({ isOpen, onClose, editingProduct, cate
             />
             Customizable (e.g. custom cake)
           </label>
-          
+
           <label className={styles.toggleRow}>
             <input
               type="checkbox"
@@ -167,6 +183,17 @@ export default function ProductFormModal({ isOpen, onClose, editingProduct, cate
             />
             Show in "Featured This Week" on homepage
           </label>
+
+          {form.isCustomizable && (
+            <CustomizationGroupsEditor
+              groups={form.customizationGroups}
+              onChangeGroups={(groups) => updateField("customizationGroups", groups)}
+              allowMessage={form.allowMessage}
+              onChangeAllowMessage={(val) => updateField("allowMessage", val)}
+              allowReferenceImage={form.allowReferenceImage}
+              onChangeAllowReferenceImage={(val) => updateField("allowReferenceImage", val)}
+            />
+          )}
 
           {error && <p className={styles.error}>{error}</p>}
         </div>
