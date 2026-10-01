@@ -83,6 +83,15 @@
   color: var(--color-text-600);
 }
 
+.empty {
+  text-align: center;
+  font-family: var(--font-body);
+  color: var(--color-text-600);
+  padding: var(--space-xl);
+  width: 100%;
+}
+
+
 @media (max-width: 480px) {
   .card {
     width: 168px;

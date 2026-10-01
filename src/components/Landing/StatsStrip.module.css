@@ -1,0 +1,40 @@
+.strip {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2xl);
+  flex-wrap: wrap;
+  background: var(--color-plum-950);
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 2rem;
+  color: var(--color-white);
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 480px) {
+  .strip {
+    gap: var(--space-lg);
+  }
+
+  .value {
+    font-size: 1.5rem;
+  }
+}

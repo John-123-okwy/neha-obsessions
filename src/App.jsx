@@ -25,11 +25,15 @@ import Products from "./pages/admin/Products";
 import Orders from "./pages/admin/Orders";
 import DeliveryZones from "./pages/admin/DeliveryZones";
 import AdminUsers from "./pages/admin/AdminUsers";
+import ScrollToTop from "./components/ScrollToTop";
 import "./styles/tokens.css";
+import LandingSettings from "./pages/admin/LandingSettings";
+
 
 function App() {
   return (
     <BrowserRouter>
+        <ScrollToTop />
       <AuthProvider>
         <CartProvider>
           <ToastProvider>
@@ -126,6 +130,8 @@ function App() {
                 <Route path="orders" element={<Orders />} />
                 <Route path="delivery-zones" element={<DeliveryZones />} />
                 <Route path="users" element={<AdminUsers />} />
+                    
+        <Route path="landing" element={<LandingSettings />} />           
               </Route>
             </Routes>
           </ToastProvider>

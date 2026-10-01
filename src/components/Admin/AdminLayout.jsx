@@ -12,6 +12,8 @@ const NAV_ITEMS = [
   { to: "/admin/delivery-zones", label: "Delivery Zones" },
   { to: "/admin/users", label: "Admin Users" },
   { to: "/admin/settings", label: "Settings" },
+  
+   { to: "/admin/landing", label: "Landing Page" },
 ];
 
 export default function AdminLayout() {
