@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getProductById } from "../services/products";
 import { useCart } from "../context/CartContext";
+import { useToast } from "../context/ToastContext";
 import { getOptimizedUrl } from "../services/cloudinary";
 import CustomizeWizard from "../components/Customize/CustomizeWizard";
 import Skeleton from "../components/Skeleton/Skeleton";
@@ -10,6 +11,7 @@ import styles from "./ProductDetail.module.css";
 export default function ProductDetail() {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { showToast } = useToast();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [wizardOpen, setWizardOpen] = useState(false);
@@ -71,7 +73,13 @@ export default function ProductDetail() {
               Customize This Cake
             </button>
           ) : (
-            <button className={styles.addBtn} onClick={() => addToCart(product)}>
+            <button
+              className={styles.addBtn}
+              onClick={() => {
+                addToCart(product);
+                showToast(`${product.name} added to cart`);
+              }}
+            >
               Add to Cart
             </button>
           )}

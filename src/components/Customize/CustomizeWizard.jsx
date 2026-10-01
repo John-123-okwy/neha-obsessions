@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useCart } from "../../context/CartContext";
+import { useToast } from "../../context/ToastContext";
 import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
 import {
   calculateCustomizationTotal,
@@ -12,6 +13,7 @@ import styles from "./CustomizeWizard.module.css";
 
 export default function CustomizeWizard({ product, onClose }) {
   const { addToCart } = useCart();
+  const { showToast } = useToast();
   useBodyScrollLock();
 
   const enabledGroups = useMemo(
@@ -78,6 +80,7 @@ export default function CustomizeWizard({ product, onClose }) {
       requiresConfirmation,
     });
 
+    showToast(`${product.name} added to cart`);
     setJustAdded(true);
     setTimeout(onClose, 900);
   }

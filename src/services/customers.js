@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 export async function createCustomerProfile(uid, data) {
@@ -14,5 +14,5 @@ export async function getCustomerProfile(uid) {
 }
 
 export async function updateCustomerProfile(uid, updates) {
-  await updateDoc(doc(db, "customers", uid), updates);
+  await setDoc(doc(db, "customers", uid), updates, { merge: true });
 }

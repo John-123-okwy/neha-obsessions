@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
+import { useToast } from "../../context/ToastContext";
 import { getOptimizedUrl } from "../../services/cloudinary";
 import CustomizeWizard from "../Customize/CustomizeWizard";
 import styles from "./ProductCard.module.css";
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
+  const { showToast } = useToast();
   const [wizardOpen, setWizardOpen] = useState(false);
 
   const rawImage = product.images?.[0] || product.image;
@@ -32,8 +34,6 @@ export default function ProductCard({ product }) {
           <span className={styles.price}>
             {hasCustomization ? "From " : ""}₦{Number(product.price).toLocaleString()}
           </span>
-          
-          
           {hasCustomization ? (
             <button
               className={styles.customizeBtn}
@@ -42,8 +42,13 @@ export default function ProductCard({ product }) {
               Customize
             </button>
           ) : (
-          
-            <button className={styles.addBtn} onClick={() => addToCart(product)}>
+            <button
+              className={styles.addBtn}
+              onClick={() => {
+                addToCart(product);
+                showToast(`${product.name} added to cart`);
+              }}
+            >
               Add
             </button>
           )}
@@ -55,4 +60,4 @@ export default function ProductCard({ product }) {
       )}
     </div>
   );
-}0
+}
